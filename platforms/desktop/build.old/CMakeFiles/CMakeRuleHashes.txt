@@ -1,0 +1,20 @@
+# Hashes of file build rules.
+1e950a06e73bc9c98672c131ca8bcbaa SDL/CMakeFiles/uninstall
+bdf7bd49c2c0c05890f8fcb9b07b52f2 SDL_image/external/libpng-1.6.37/CMakeFiles/genfiles
+6ed8893f613cd7142b4d13cac524d606 SDL_image/external/libpng-1.6.37/CMakeFiles/genprebuilt
+bdf7bd49c2c0c05890f8fcb9b07b52f2 SDL_image/external/libpng-1.6.37/CMakeFiles/gensym
+bdf7bd49c2c0c05890f8fcb9b07b52f2 SDL_image/external/libpng-1.6.37/CMakeFiles/genvers
+bdf7bd49c2c0c05890f8fcb9b07b52f2 SDL_image/external/libpng-1.6.37/CMakeFiles/symbol-check
+f019aa81a33abddd06986a060b9d12e8 SDL_image/external/libpng-1.6.37/libpng.sym
+6937b0d8aa2849bd9d469558214813b6 SDL_image/external/libpng-1.6.37/libpng.vers
+d1a448e239453091c09a73fe7a6f3323 SDL_image/external/libpng-1.6.37/pnglibconf.c
+e17c43de639a9ac1fd5ab2428136095e SDL_image/external/libpng-1.6.37/pnglibconf.h
+ce9491ddf502cade7f01e3851e22bffd SDL_image/external/libpng-1.6.37/pnglibconf.out
+e4aa6f18744dfda1f5e7aeb2b9cc19d4 SDL_image/external/libpng-1.6.37/pngprefix.h
+0778657d92848c553928238e00ee1ad5 SDL_image/external/libpng-1.6.37/scripts/intprefix.out
+c1181912bd1604d3e1217b0b9f2d808e SDL_image/external/libpng-1.6.37/scripts/pnglibconf.c
+69c23487f3ac7f289a84ff184e8c4016 SDL_image/external/libpng-1.6.37/scripts/prefix.out
+bc46ed43339068e4beafd76f909e451f SDL_image/external/libpng-1.6.37/scripts/sym.out
+ac95a3002d4772d36a14a2c3b6cb3635 SDL_image/external/libpng-1.6.37/scripts/symbols.chk
+529c930d85f21b811dc048d35fe4323c SDL_image/external/libpng-1.6.37/scripts/symbols.out
+d80ec35b30d4eebd189d01c870d6fd95 SDL_image/external/libpng-1.6.37/scripts/vers.out
