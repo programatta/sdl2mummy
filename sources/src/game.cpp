@@ -123,11 +123,20 @@ void Game::ProcessEvents()
     SDL_Event event;
     if(SDL_PollEvent(&event))
     {
-        if(event.type == SDL_QUIT || event.type == SDL_KEYDOWN || event.type == SDL_FINGERDOWN)
+        if(event.type == SDL_QUIT)
         {
             mIsRunning = false;
         }
-        mPlayState->ProcessEvents();
+        else if(event.type == SDL_KEYDOWN)
+        {
+            switch( event.key.keysym.sym )
+            {
+                case SDLK_ESCAPE:
+                    mIsRunning = false;
+                    break;
+            }
+            mPlayState->ProcessEvents(event);
+        }
     }
 }
 
@@ -140,8 +149,6 @@ void Game::Render()
 {
     SDL_SetRenderDrawColor(mRenderer, 0xA0, 0xA0, 0xA0, 0xFF);
     SDL_RenderClear(mRenderer);
-    //DrawMap(mRenderer, mapTex, offsetToCenter);
-    //SDL_RenderCopy(mRenderer, tex, &orig, &dest);
     mPlayState->Render(mRenderer);
     SDL_RenderPresent(mRenderer);
 }

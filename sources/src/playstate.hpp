@@ -1,9 +1,9 @@
 #ifndef PLAY_STATE_HPP
 #define PLAY_STATE_HPP
 
-class SDL_Renderer;
-class SDL_Texture;
-class SDL_Surface;
+#include <SDL.h>
+#include "spritesheet.hpp"
+#include "player.hpp"
 
 class PlayState
 {
@@ -11,16 +11,16 @@ class PlayState
         PlayState(SDL_Renderer *renderer);
         ~PlayState();
 
-        void ProcessEvents();
+        void ProcessEvents(const SDL_Event& event);
         void Update(float deltaTime);
         void Render(SDL_Renderer *renderer);
     
     private:
         void DrawMap(SDL_Renderer* render, SDL_Texture* texture, int offsetToCenter);
-
         
-        SDL_Texture *mPlayerTex;
-        SDL_Texture *mMapTex;
+        SpriteSheet mSpriteSheet;
+        SDL_Texture *mSpriteTex;
+        Player mPlayer;
 };
 
 #endif  //PLAY_STATE_HPP

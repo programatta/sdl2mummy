@@ -1,1 +1,0 @@
-/Library/Developer/CommandLineTools/usr/bin/cc  -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/png-fix-itxt.dir/contrib/tools/png-fix-itxt.c.o  -o png-fix-itxt  /Users/programatta/Desarrollo/workspaces/wscpp/sdl2demo02/platforms/desktop/../../sources/SDL_image/external/zlib-1.2.11/build/lib/libz.dylib 

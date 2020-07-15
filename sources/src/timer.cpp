@@ -9,7 +9,12 @@ Timer::Timer(int fps):MIN_FRAME_TIME(1000/fps)
 
 float Timer::GetDeltaTime()
 {
-    return mDeltaTime;
+    if(iNumOfFPS > 0)
+        return mDeltaTime/iNumOfFPS;
+    else
+    {
+        return mDeltaTime/(1000/MIN_FRAME_TIME);
+    }
 }
 
 int Timer::GetCurrentFPS()

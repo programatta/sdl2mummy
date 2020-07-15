@@ -6,63 +6,41 @@
 
 PlayState::PlayState(SDL_Renderer *renderer)
 {
-    //Player.
-    SDL_Surface *playerSurf = nullptr;
-    playerSurf = IMG_Load(Utils::ResourcePath("player.png").c_str());
-    if(!playerSurf)
-    {
-        std::stringstream msg;
-        msg << "IMG_Load:" << SDL_GetError();
-        Trace::Info("SDL",msg.str());
-        //return 1;
-    }
-    mPlayerTex = SDL_CreateTextureFromSurface(renderer, playerSurf);
-    SDL_FreeSurface(playerSurf);
-    if(!mPlayerTex)
-    {
-        std::stringstream msg;
-        msg << "SDL_CreateTextureFromSurface:" << SDL_GetError();
-        Trace::Info("SDL",msg.str());
-        //return 1;
-    }
-
-    //Map
-    SDL_Surface *mapSurf = nullptr;
-    mapSurf = IMG_Load(Utils::ResourcePath("walls.png").c_str());
-    if(!mapSurf)
-    {
-        std::stringstream msg;
-        msg << "IMG_Load:" << SDL_GetError();
-        Trace::Info("SDL",msg.str());
-        //return 1;
-    }
-    mMapTex = SDL_CreateTextureFromSurface(renderer, mapSurf);
-    SDL_FreeSurface(mapSurf);
-    if(!mMapTex)
-    {
-        std::stringstream msg;
-        msg << "SDL_CreateTextureFromSurface:" << SDL_GetError();
-        Trace::Info("SDL",msg.str());
-        //return 1;
-    }
+    //Cargamos los sprites.
+    mSpriteSheet.Load(renderer,"sprites");
+    mPlayer.SetSpriteSheet(mSpriteSheet);
 }
 
 PlayState::~PlayState()
 {
-    SDL_DestroyTexture( mPlayerTex );
-    SDL_DestroyTexture( mMapTex );
-    mPlayerTex = nullptr;
-    mMapTex = nullptr;
 }
 
-void PlayState::ProcessEvents()
+void PlayState::ProcessEvents(const SDL_Event& event)
 {
-
+    if(event.type == SDL_KEYDOWN) // || event.type == SDL_FINGERDOWN)
+    {
+        Trace::Info("SDL", "PlayState::ProcessEvents - tecla pulsada");
+        switch( event.key.keysym.sym )
+        {
+            case SDLK_DOWN:
+                mPlayer.Move(PlayerDir::DOWN);
+                break;
+            case SDLK_UP:
+                mPlayer.Move(PlayerDir::UP);
+                break;
+            case SDLK_LEFT:
+                mPlayer.Move(PlayerDir::LEFT);
+                break;
+            case SDLK_RIGHT:
+                mPlayer.Move(PlayerDir::RIGHT);
+                break;
+        }
+    }
 }
 
 void PlayState::Update(float deltaTime)
 {
-
+    mPlayer.Update(deltaTime);
 }
 
 void PlayState::Render(SDL_Renderer *renderer)
@@ -71,19 +49,22 @@ void PlayState::Render(SDL_Renderer *renderer)
     SDL_RenderGetScale(renderer, &scaleFactorX, &scaleFactorY);
     int w,h;
     SDL_GetRendererOutputSize(renderer, &w, &h);
-    
-    std::stringstream msg;
-    msg << "Render - el w:" << w << " - el sfX:" << scaleFactorX << " - el sfY:" << scaleFactorY;
-    Trace::Info("SDL",msg.str());
-    
+        
     int offsetToCenter = ((w / scaleFactorY)-(32*19))/2;
 
-    //Player.
-    SDL_Rect orig = {0,0,32,32};
-    SDL_Rect dest = {455-16,256-32,32,32};
+    DrawMap(renderer, mSpriteSheet.GetTexture(), offsetToCenter);
 
-    DrawMap(renderer, mMapTex, offsetToCenter);
-    SDL_RenderCopy(renderer, mPlayerTex, &orig, &dest);
+    //Player.
+    mPlayer.Render(renderer);
+
+    // int px = w/scaleFactorY/2;
+    // int py = h/scaleFactorY/2;
+    // SDL_Rect orig = {0,0,32,32};
+    // SDL_Rect dest = {px-16,py-32,32,32};
+
+    // orig = mSpriteSheet.GetFrameByName("player-1.png");
+    // DrawMap(renderer, mSpriteSheet.GetTexture(), offsetToCenter);
+    // SDL_RenderCopy(renderer, mSpriteSheet.GetTexture(), &orig, &dest);
 }
 
 
@@ -92,35 +73,49 @@ void PlayState::Render(SDL_Renderer *renderer)
 /*===========================================================================*/
 void PlayState::DrawMap(SDL_Renderer* render, SDL_Texture* texture, int offsetToCenter)
 {
-    std::stringstream msg;
-    msg << "OffsetToCenter:" << offsetToCenter;
-    Trace::Info("SDL",msg.str());
     int map[16][19] = {
-            {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+            {1,1,1,1,1,1,1,1,1,4,1,1,1,1,1,1,1,1,1},
             {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
             {1,0,1,1,1,0,1,1,1,0,1,1,1,0,1,1,1,0,1},
-            {1,0,1,1,1,0,1,1,1,0,1,1,1,0,1,1,1,0,1},
+            {1,0,1,2,1,0,1,2,1,0,1,2,1,0,1,2,1,0,1},
             {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
             {1,0,1,1,1,0,1,1,1,0,1,1,1,0,1,1,1,0,1},
-            {1,0,1,1,1,0,1,1,1,0,1,1,1,0,1,1,1,0,1},
+            {1,0,1,2,1,0,1,2,1,0,1,2,1,0,1,2,1,0,1},
             {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
             {1,0,1,1,1,0,1,1,1,0,1,1,1,0,1,1,1,0,1},
-            {1,0,1,1,1,0,1,1,1,0,1,1,1,0,1,1,1,0,1},
+            {1,0,1,2,1,0,1,2,1,0,1,2,1,0,1,2,1,0,1},
             {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
             {1,0,1,1,1,0,1,1,1,0,1,1,1,0,1,1,1,0,1},
-            {1,0,1,1,1,0,1,1,1,0,1,1,1,0,1,1,1,0,1},
+            {1,0,1,2,1,0,1,2,1,0,1,2,1,0,1,2,1,0,1},
             {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
             {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
             {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1}
     };
-    SDL_Rect orig = {0,0,32,32};
 
-    for(int r=0; r<16; r++) {
-        for (int c = 0; c < 19; c++) {
-            if (map[r][c] == 1) {
-                SDL_Rect dest = {32 * c + offsetToCenter, 32 * r, 32, 32};
-                SDL_RenderCopy(render, texture, &orig, &dest);
+    for(int r=0; r<16; r++) 
+    {
+        for(int c = 0; c < 19; c++)
+        {
+            SDL_Rect orig;
+            if(map[r][c] == 1)
+            {
+                orig = mSpriteSheet.GetFrameByName("tiles-36.png");
             }
+            else if(map[r][c] == 2)
+            {
+                orig = mSpriteSheet.GetFrameByName("tiles-57.png");
+            }
+            else if(map[r][c] == 4)
+            {
+                orig = mSpriteSheet.GetFrameByName("tiles-54.png");
+            }
+            else
+            {
+                orig = mSpriteSheet.GetFrameByName("desert-3.png");
+            }
+
+            SDL_Rect dest = {32 * c + offsetToCenter, 32 * r, 32, 32};
+            SDL_RenderCopy(render, texture, &orig, &dest);
         }
     }
 }

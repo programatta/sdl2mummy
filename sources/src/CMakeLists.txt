@@ -4,6 +4,9 @@ project(MY_APP)
 
 set (CMAKE_CXX_STANDARD 11)
 
+# JSON
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../json")
+
 find_library(SDL2 SDL2)
 find_library(SDL2_image SDL2_image)
 
