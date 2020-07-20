@@ -3,8 +3,9 @@
 #include "trace.hpp"
 #include <sstream>
 
-Player::Player()
+Player::Player(IMapNotificable& map)
 {
+    mMap = &map;
     mX=0;
     mToX=0;
     mY=0;
@@ -52,6 +53,12 @@ void Player::SetSpriteSheet(const SpriteSheet& spritesheet)
     mAnimations.insert( std::pair<std::string,Animation>("up",upRight));    
 }
 
+ void Player::SetPosition(float x, float y)
+ {
+     mPosX = x;
+     mPosY = y;
+ }
+
 
 void Player::Move(PlayerDir direction)
 {
@@ -94,9 +101,11 @@ void Player::Move(PlayerDir direction)
 
 void Player::Update(float deltaTime)
 {   
-    mAnimations[mAnimName].UpdateFrame(deltaTime);
     if((mToY>0)||(mToX>0))
+    {
+        mAnimations[mAnimName].UpdateFrame(deltaTime);
         mCurrentFrameData = mAnimations[mAnimName].GetFrame();
+    }
     else
         mCurrentFrameData = mAnimations[mAnimName].GetFrame(1);    
 
@@ -113,8 +122,7 @@ void Player::Update(float deltaTime)
         {
             if(mPosY < mToY)
             {
-                float mY1 = mPosY + mY*2 *deltaTime;
-                mPosY = mY1;
+                mPosY = mPosY + mY*2 *deltaTime;
             }
             else if( mPosY >= mToY )
             {
@@ -123,15 +131,14 @@ void Player::Update(float deltaTime)
                 mToY=0;
 
                 //Update map.
-                //updateMap(mSprite.getPosition().x, mSprite.getPosition().y, mAnimName);
+                updateMap(mPosX, mPosY, mAnimName);
             }
         }
         else if(mY<0)
         {
             if(mPosY > mToY)
             {
-                float mY1 = mPosY + mY*2 *deltaTime;
-                mPosY = mY1;
+                mPosY = mPosY + mY*2 *deltaTime;
             }
             else if(mPosY <= mToY)
             {
@@ -140,7 +147,7 @@ void Player::Update(float deltaTime)
                 mToY=0;
 
                 //Update map.
-                //updateMap(mSprite.getPosition().x, mSprite.getPosition().y, mAnimName);                
+                updateMap(mPosX, mPosY, mAnimName);                
             }
         }
     }
@@ -157,8 +164,7 @@ void Player::Update(float deltaTime)
         {
             if(mPosX < mToX)
             {
-                float mX1 = mPosX + mX*2 *deltaTime;
-                mPosX = mX1;
+                mPosX = mPosX + mX*2 *deltaTime;
             }
             else if( mPosX >= mToX )
             {
@@ -167,15 +173,14 @@ void Player::Update(float deltaTime)
                 mToX=0;
 
                 //Update map.
-                //updateMap(mSprite.getPosition().x, mSprite.getPosition().y, mAnimName);
+                updateMap(mPosX, mPosY, mAnimName);
             }
         }
         else if(mX<0)
         {
             if(mPosX > mToX)
             {
-                float mX1 = mPosX + mX*2 *deltaTime;
-                mPosX = mX1;
+                mPosX = mPosX + mX*2 *deltaTime;
             }
             else if(mPosX <= mToX)
             {
@@ -184,7 +189,7 @@ void Player::Update(float deltaTime)
                 mToX=0;
 
                 //Update map.
-                //updateMap(mSprite.getPosition().x, mSprite.getPosition().y, mAnimName);
+                updateMap(mPosX, mPosY, mAnimName);
             }
         }
     }
@@ -192,19 +197,6 @@ void Player::Update(float deltaTime)
 
 void Player::Render(SDL_Renderer *renderer)
 {
-    float scaleFactorX=1,scaleFactorY=1;
-    SDL_RenderGetScale(renderer, &scaleFactorX, &scaleFactorY);
-    
-    if( mPosX == -1 && mPosY == -1)
-    {
-        int w,h;
-        SDL_GetRendererOutputSize(renderer, &w, &h);
-
-        //int px = w/scaleFactorY/2;
-        //int py = h/scaleFactorY/2;
-        mPosX = w/scaleFactorY/2 - 16;
-        mPosY = h/scaleFactorY/2 - 32;
-    }
     SDL_Rect orig = {mCurrentFrameData.x,mCurrentFrameData.y,32,32};
     SDL_Rect dest = {
         static_cast<int>(mPosX), 
@@ -212,9 +204,6 @@ void Player::Render(SDL_Renderer *renderer)
         32,
         32
     };
-
-    //orig = mSpriteSheet.GetFrameByName("player-1.png");
-
     SDL_RenderCopy(renderer, mTexture, &orig, &dest);
 }
 
@@ -224,5 +213,38 @@ void Player::Render(SDL_Renderer *renderer)
 /*===========================================================================*/
 bool Player::checkCollision(int x, int y) const
 {
-    return false;
+    int xlog = (x)/32;
+    int ylog = (y)/32;
+
+    bool hasCol = false;
+    switch(mMap->GetTypeAt(xlog, ylog))
+    {
+        case 1: //Muro.
+        case 2: //Puerta tumba.
+        case 3: //Puerta tumba abierta.
+        case 4: //Puerta principal.
+            hasCol = true;
+            break;
+        default:
+            break;
+    }
+    return hasCol;
+}
+
+void Player::updateMap(int x, int y, const std::string& dir)
+{
+    int xlog = (x)/32;
+    int ylog = (y)/32;
+
+    if(mMap->GetTypeAt(xlog,ylog) == 0)
+    {
+        if( dir == "up")
+            mMap->SetTypeAt(xlog, ylog, 6);
+        if( dir == "down")
+            mMap->SetTypeAt(xlog, ylog, 7);
+        if( dir == "left")
+            mMap->SetTypeAt(xlog, ylog, 8);
+        if( dir == "right")
+            mMap->SetTypeAt(xlog, ylog, 9);
+    }
 }

@@ -5,16 +5,13 @@ Timer::Timer(int fps):MIN_FRAME_TIME(1000/fps)
     mFPSTime = SDL_GetTicks();
     iFPS=0;
     iNumOfFPS=0;
+
+    mDeltaTime = 0.05f; // a 20 FPS.
 }
 
 float Timer::GetDeltaTime()
 {
-    if(iNumOfFPS > 0)
-        return mDeltaTime/iNumOfFPS;
-    else
-    {
-        return mDeltaTime/(1000/MIN_FRAME_TIME);
-    }
+    return mDeltaTime;
 }
 
 int Timer::GetCurrentFPS()
@@ -29,15 +26,20 @@ void Timer::Start()
 
 void Timer::End()
 {
-    if(SDL_GetTicks() - 1000 >= mFPSTime)
+    Uint32 currentTicks = SDL_GetTicks();
+    if(currentTicks - 1000 >= mFPSTime)
     {
-        mFPSTime = SDL_GetTicks();
+        mFPSTime = currentTicks;
         iNumOfFPS = iFPS;
         iFPS = 0;
     }
     ++iFPS;
 
-    mDeltaTime = (SDL_GetTicks () - mFrameTime)*0.001*iNumOfFPS;
-    if(SDL_GetTicks() - mFrameTime < MIN_FRAME_TIME)
-        SDL_Delay(MIN_FRAME_TIME - (SDL_GetTicks () - mFrameTime));
+    if(currentTicks - mFrameTime < MIN_FRAME_TIME)
+        SDL_Delay(MIN_FRAME_TIME - (currentTicks - mFrameTime));
+
+    mDeltaTime = (currentTicks - mFrameTime)*0.001;
+    // Limit the time delta to 0.05 seconds (about 20FPS).
+    if(mDeltaTime > 0.05f)
+        mDeltaTime = 0.05f;
 }

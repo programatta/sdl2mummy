@@ -3,6 +3,7 @@
 
 #include <SDL.h>
 #include "spritesheet.hpp"
+#include "stage.hpp"
 #include "player.hpp"
 
 class PlayState
@@ -11,15 +12,14 @@ class PlayState
         PlayState(SDL_Renderer *renderer);
         ~PlayState();
 
-        void ProcessEvents(const SDL_Event& event);
+        void ProcessEvents();
         void Update(float deltaTime);
         void Render(SDL_Renderer *renderer);
     
-    private:
-        void DrawMap(SDL_Renderer* render, SDL_Texture* texture, int offsetToCenter);
-        
+    private:        
         SpriteSheet mSpriteSheet;
         SDL_Texture *mSpriteTex;
+        Stage mStage;
         Player mPlayer;
 };
 

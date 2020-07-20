@@ -135,9 +135,9 @@ void Game::ProcessEvents()
                     mIsRunning = false;
                     break;
             }
-            mPlayState->ProcessEvents(event);
         }
     }
+    mPlayState->ProcessEvents();
 }
 
 void Game::Update(float deltaTime)

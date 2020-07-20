@@ -5,7 +5,7 @@
 #include <map>
 #include <string>
 #include "animation.hpp"
-
+#include "imapnotificable.hpp"
 
 class SpriteSheet;
 
@@ -19,8 +19,9 @@ enum PlayerDir {
 class Player
 {
     public:
-        explicit Player();
+        explicit Player(IMapNotificable& map);
         void SetSpriteSheet(const SpriteSheet& spritesheet);
+        void SetPosition(float x, float y);
 
         void Move(PlayerDir direction);
         void Update(float deltaTime);
@@ -28,6 +29,7 @@ class Player
         
     private:
         bool checkCollision(int x, int y) const;
+        void updateMap(int x, int y, const std::string& dir);
 
         SDL_Texture *mTexture;
         std::map<std::string, Animation> mAnimations;
@@ -39,6 +41,7 @@ class Player
         int mY;
         int mToY;
         FrameData mCurrentFrameData;
+        IMapNotificable* mMap;
 };
 
 #endif  //PLAYER_HPP
