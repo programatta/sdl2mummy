@@ -12,6 +12,7 @@ class PlayState
         PlayState(SDL_Renderer *renderer);
         ~PlayState();
 
+        void ProcessEvents(SDL_Event &event);
         void ProcessEvents();
         void Update(float deltaTime);
         void Render(SDL_Renderer *renderer);
@@ -21,6 +22,15 @@ class PlayState
         SDL_Texture *mSpriteTex;
         Stage mStage;
         Player mPlayer;
+
+        //TODO: esto va tener que ir a un input manager o algo asi.
+        float tX0;
+        float tY0;
+        float tX;
+        float tY;
+        bool isMoving;
+        int playerDir;
+        bool starMovement;
 };
 
 #endif  //PLAY_STATE_HPP

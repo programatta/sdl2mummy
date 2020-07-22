@@ -69,9 +69,8 @@ Game::Game(const std::string &title, int width, int height, bool isFullScreen)
 
     if(!isOk) return;
 
-    float scaleFactor = screenRect.h/(height*1.0f);
-    SDL_RenderSetScale(mRenderer, scaleFactor, scaleFactor);
-
+    SDL_RenderSetLogicalSize(mRenderer, width, height);
+    
     mHasSDL = SDL_TRUE;
     mPlayState = new PlayState(mRenderer);
     Trace::Info("SDL","SDL_main started ok!");
@@ -137,7 +136,12 @@ void Game::ProcessEvents()
             }
         }
     }
+    
+    #if ANDROID
+    mPlayState->ProcessEvents(event);
+    #else
     mPlayState->ProcessEvents();
+    #endif
 }
 
 void Game::Update(float deltaTime)

@@ -2,8 +2,11 @@
 #define STAGE_HPP
 
 #include <SDL.h>
+#include <vector>
 #include "imapnotificable.hpp"
 #include "spritesheet.hpp"
+
+class Tomb;
 
 class Stage : public IMapNotificable
 {
@@ -19,8 +22,12 @@ class Stage : public IMapNotificable
         void Render(SDL_Renderer *renderer);
 
     private:
+        int generateContentType();
+        void createObjectType(int type, int x, int y);
+
         int mMap[16][19];
         SpriteSheet mSpriteSheet;
+        std::vector<Tomb> mTombs;
 };
 
 #endif  //STAGE_HPP
