@@ -59,6 +59,16 @@ void Player::SetSpriteSheet(const SpriteSheet& spritesheet)
      mPosY = y;
  }
 
+int Player::GetX()const
+{
+    return mPosX;
+}
+
+int Player::GetY()const
+{
+    return mPosY;
+}
+
 
 void Player::Move(PlayerDir direction)
 {

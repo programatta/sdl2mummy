@@ -22,6 +22,8 @@ class Player
         explicit Player(IMapNotificable& map);
         void SetSpriteSheet(const SpriteSheet& spritesheet);
         void SetPosition(float x, float y);
+        int GetX()const;
+        int GetY()const;
 
         void Move(PlayerDir direction);
         void Update(float deltaTime);

@@ -10,7 +10,16 @@ Remake del juego *Oh! Mummy* desarrollado en C++ con la librería SDL2 y para la
 Basado en la estructura de proyecto [**sdl2anddesk**](https://github.com/programatta/sdl2anddesk.git).
 
 # Progreso.
-## 30300722.
+## 20200723.
+Se añade -DCMAKE_BUILD_TYPE=Debug para depuración de la app.
+Se añade funcionalidad para obtener objetos de juego (llave, papiro y pocion).
+
+Se crea la clase **ItemObject** que gestiona los objetos de juego.
+
+Se añade funcionalidad para que el juego cree esos objetos y el player los pueda recoger.
+
+
+## 20200722.
 Se añade una clase para el contexto del juego **GameContext**.
 
 Se hace uso de **SDL_RenderSetLogicalSize** y se elimina toda la funcionalidad relacionada con la escala **SDL_RenderSetScale**, **SDL_RenderGetScale** y **SDL_GetRendererOutputSize** para ajustar el juego a diferentes resoluciones.

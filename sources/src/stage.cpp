@@ -2,7 +2,7 @@
 #include "tomb.hpp"
 #include <stdlib.h>     /* srand, rand */
 
-Stage::Stage():
+Stage::Stage(ICreateObjectNotificable& object):
     mMap{
             {1,1,1,1,1,1,1,1,1,4,1,1,1,1,1,1,1,1,1},
             {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
@@ -22,6 +22,7 @@ Stage::Stage():
             {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1}
     }
 {
+    mObject = &object;
     int x0=2;
     int y0=2;
 
@@ -68,7 +69,7 @@ int Stage::GetTypeAt(int x, int y) const
 
 void Stage::SetSpriteSheet(const SpriteSheet& spritesheet)
 {
-    mSpriteSheet = spritesheet;
+    mSpriteSheet = &spritesheet;
 }
 
 void Stage::Update(float deltaTime)
@@ -101,55 +102,55 @@ void Stage::Render(SDL_Renderer *renderer)
             if(mMap[r][c] == 1)
             {
                 //muro
-                orig = mSpriteSheet.GetFrameByName("tiles-36.png");
+                orig = mSpriteSheet->GetFrameByName("tiles-36.png");
             }
             else if(mMap[r][c] == 2)
             {
                 //puerta tumba
-                orig = mSpriteSheet.GetFrameByName("tiles-57.png");
+                orig = mSpriteSheet->GetFrameByName("tiles-57.png");
             }
             else if(mMap[r][c] == 3)
             {
                 //puerta tumba abierta
-                orig = mSpriteSheet.GetFrameByName("tiles-58.png");
+                orig = mSpriteSheet->GetFrameByName("tiles-58.png");
             }
             else if(mMap[r][c] == 4)
             {
                 //puerta principal
-                orig = mSpriteSheet.GetFrameByName("tiles-54.png");
+                orig = mSpriteSheet->GetFrameByName("tiles-54.png");
             }
             else if(mMap[r][c] == 5)
             {
                 //puerta principal abierta
-                orig = mSpriteSheet.GetFrameByName("tiles-55.png");
+                orig = mSpriteSheet->GetFrameByName("tiles-55.png");
             }
             else if(mMap[r][c] == 6)
             {
                 //pasos arriba
-                orig =  mSpriteSheet.GetFrameByName("desert-33.png");
+                orig =  mSpriteSheet->GetFrameByName("desert-33.png");
             }
             else if(mMap[r][c] == 7)
             {
                 //pasos abajo
-                orig =  mSpriteSheet.GetFrameByName("desert-52.png");
+                orig =  mSpriteSheet->GetFrameByName("desert-52.png");
             }
             else if(mMap[r][c] == 8)
             {
                 //pasos izquierda
-                orig = mSpriteSheet.GetFrameByName("desert-51.png");
+                orig = mSpriteSheet->GetFrameByName("desert-51.png");
             }
             else if(mMap[r][c] == 9)
             {
                 //pasos derecha
-                orig = mSpriteSheet.GetFrameByName("desert-32.png");
+                orig = mSpriteSheet->GetFrameByName("desert-32.png");
             }            
             else
             {
-                orig = mSpriteSheet.GetFrameByName("desert-3.png");
+                orig = mSpriteSheet->GetFrameByName("desert-3.png");
             }
 
             SDL_Rect dest = {32 * c, 32 * r, 32, 32};
-            SDL_RenderCopy(renderer, mSpriteSheet.GetTexture(), &orig, &dest);
+            SDL_RenderCopy(renderer, mSpriteSheet->GetTexture(), &orig, &dest);
         }
     }
 }
@@ -182,8 +183,8 @@ int Stage::generateContentType()
 void Stage::createObjectType(int type, int xlog, int ylog)
 {
     //Logic to phisic.
-    int x = xlog*32+16;
-    int y = ylog*32+16;
+    int x = xlog*32;
+    int y = ylog*32;
 
-    //mObject->CreateObject(type, x, y);
+    mObject->CreateObject(type, x, y);
 }

@@ -2,11 +2,14 @@
 #define PLAY_STATE_HPP
 
 #include <SDL.h>
+#include <vector>
 #include "spritesheet.hpp"
 #include "stage.hpp"
 #include "player.hpp"
+#include "itemobject.hpp"
+#include "icreateobjectnotificable.hpp"
 
-class PlayState
+class PlayState : public ICreateObjectNotificable
 {
     public:
         PlayState(SDL_Renderer *renderer);
@@ -16,12 +19,17 @@ class PlayState
         void ProcessEvents();
         void Update(float deltaTime);
         void Render(SDL_Renderer *renderer);
+
+        void CreateObject(int type, int x, int y) override;
     
-    private:        
+    private:
+        bool checkCanPickUpObject(const Player &player, const ItemObject &itemObject);
+        
         SpriteSheet mSpriteSheet;
         SDL_Texture *mSpriteTex;
         Stage mStage;
         Player mPlayer;
+        std::vector<ItemObject> mObjects;
 
         //TODO: esto va tener que ir a un input manager o algo asi.
         float tX0;

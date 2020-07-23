@@ -4,7 +4,7 @@
 #include "trace.hpp"
 #include "utils.hpp"
 
-PlayState::PlayState(SDL_Renderer *renderer):mPlayer(mStage)
+PlayState::PlayState(SDL_Renderer *renderer):mStage(*this),mPlayer(mStage)
 {
     //Cargamos los sprites.
     mSpriteSheet.Load(renderer,"sprites");
@@ -138,6 +138,20 @@ void PlayState::Update(float deltaTime)
 {
     mStage.Update(deltaTime);
     mPlayer.Update(deltaTime);
+
+    auto itObj = mObjects.begin();
+    while(itObj != mObjects.end())
+    {
+        if(checkCanPickUpObject(mPlayer,(*itObj)))
+        {
+            itObj = mObjects.erase(itObj);
+        }
+        else
+        {
+           (*itObj).Update(deltaTime);
+           ++itObj;
+        }
+    }
 }
 
 void PlayState::Render(SDL_Renderer *renderer)
@@ -147,4 +161,42 @@ void PlayState::Render(SDL_Renderer *renderer)
 
     //Player.
     mPlayer.Render(renderer);
+
+    //Object.
+    for(auto &object:mObjects)
+        object.Render(renderer);    
+}
+
+void PlayState::CreateObject(int type, int x, int y)
+{
+    if( type == 1 ) //Momia.
+    {
+        // Mummy mummy(x,y);
+        // mummy.SetSpriteSheet(mSpriteSheet);
+        // mMummies.push_back(mummy);
+    }
+    else if((2 <= type) && (type <= 4)) //Pocion, Llave y Papiro.
+    {
+        ItemObject itemObject(type, x, y);
+        itemObject.SetSpriteSheet(mSpriteSheet);
+        mObjects.push_back(itemObject);
+    }
+    else if( type == 5 ) //Hechizo.
+    {
+        //TODO:        
+    }    
+}
+
+
+/*===========================================================================*/
+/*===========================================================================*/
+bool PlayState::checkCanPickUpObject(const Player &player, const ItemObject &itemObject)
+{
+    int xObjLog = (itemObject.GetX()+16)/32;
+    int yObjLog = (itemObject.GetY()+16)/32;
+
+    int xLog = (player.GetX()+16)/32;
+    int yLog = (player.GetY()+16)/32;
+
+    return (xObjLog == xLog) && (yObjLog == yLog);
 }

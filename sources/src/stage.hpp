@@ -4,6 +4,7 @@
 #include <SDL.h>
 #include <vector>
 #include "imapnotificable.hpp"
+#include "icreateobjectnotificable.hpp"
 #include "spritesheet.hpp"
 
 class Tomb;
@@ -11,7 +12,7 @@ class Tomb;
 class Stage : public IMapNotificable
 {
     public:
-        Stage();
+        Stage(ICreateObjectNotificable &object);
         ~Stage();
     
         void SetTypeAt(int x, int y, int type) override;
@@ -26,8 +27,9 @@ class Stage : public IMapNotificable
         void createObjectType(int type, int x, int y);
 
         int mMap[16][19];
-        SpriteSheet mSpriteSheet;
+        const SpriteSheet* mSpriteSheet;
         std::vector<Tomb> mTombs;
+        ICreateObjectNotificable *mObject;
 };
 
 #endif  //STAGE_HPP
