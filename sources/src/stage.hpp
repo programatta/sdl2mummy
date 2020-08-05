@@ -22,6 +22,8 @@ class Stage : public IMapNotificable
         void Update(float deltaTime);
         void Render(SDL_Renderer *renderer);
 
+        void OpenMainDoor();
+
     private:
         int generateContentType();
         void createObjectType(int type, int x, int y);

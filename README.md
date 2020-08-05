@@ -13,6 +13,10 @@ Basado en la estructura de proyecto [**sdl2anddesk**](https://github.com/program
 ## 20200805.
 Se añade funcionalidad para manejar las momias.
 
+Se añade funcionalidad para recoger objetos (poción, llave y papiro), donde las pociones se acumulan y al colisionar con una momia evitan perder una vida, matando a la momia.
+Al recoger la llave y el papiro se abre la puerta de nivel.
+
+El player al ser atacado por una momia, y no tener pociones, pierde una vida y se situa en el centro de la pantalla de nuevo (wip).
 
 ## 20200723.
 Se añade -DCMAKE_BUILD_TYPE=Debug para depuración de la app.

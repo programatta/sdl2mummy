@@ -16,6 +16,7 @@ class ItemObject
         void SetSpriteSheet(SpriteSheet& spritesheet);
         int GetX() const;
         int GetY() const;
+        int GetType() const;
 
         void Update(float deltaTime);
         void Render(SDL_Renderer *renderer);

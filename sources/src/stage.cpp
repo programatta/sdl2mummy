@@ -88,8 +88,8 @@ void Stage::Update(float deltaTime)
             ++it;
     }
 
-    if( mTombs.empty() )
-        mMap[0][9] = 5;   //Nivel abierto.
+    //if( mTombs.empty() )
+    //    mMap[0][9] = 5;   //Nivel abierto.
 }
 
 void Stage::Render(SDL_Renderer *renderer)
@@ -153,6 +153,11 @@ void Stage::Render(SDL_Renderer *renderer)
             SDL_RenderCopy(renderer, mSpriteSheet->GetTexture(), &orig, &dest);
         }
     }
+}
+
+void Stage::OpenMainDoor()
+{
+    mMap[0][9] = 5;   //Nivel abierto.
 }
 
 /*===========================================================================*/

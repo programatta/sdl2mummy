@@ -51,6 +51,16 @@ Mummy::~Mummy()
 
 }
 
+int Mummy::GetX()const
+{
+    return mPosX;
+}
+
+int Mummy::GetY()const
+{
+    return mPosY;
+}
+
 void Mummy::SetSpriteSheet(const SpriteSheet& spritesheet)
 {
     mTexture = spritesheet.GetTexture();

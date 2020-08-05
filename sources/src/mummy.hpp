@@ -14,6 +14,9 @@ class Mummy
         explicit Mummy(int x, int y);
         ~Mummy();
 
+        int GetX()const;
+        int GetY()const;
+
         void SetSpriteSheet(const SpriteSheet& spritesheet);
         void Update(float deltaTime);
         void Render(SDL_Renderer *renderer);

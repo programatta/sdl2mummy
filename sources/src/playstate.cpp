@@ -12,15 +12,15 @@ PlayState::PlayState(SDL_Renderer *renderer):mStage(*this),mPlayer(mStage)
     int w,h;
     SDL_RenderGetLogicalSize(renderer, &w, &h);
 
-    float posX = w/2 - 16;
-    float posY = h/2 - 32;
+    mOrigPlayerX = w/2 - 16;
+    mOrigPlayerY = h/2 - 32;
 
     std::stringstream msg;
-    msg << "[PlayState] Player Pos x:" << posX <<  " - pos y:" << posY << std::endl;
+    msg << "[PlayState] Player Pos x:" << mOrigPlayerX <<  " - pos y:" << mOrigPlayerY << std::endl;
     msg << "[PlayState] W:" << w <<  " - H:" << h;
     Trace::Info("SDL",msg.str());
 
-    mPlayer.SetPosition(posX, posY);
+    mPlayer.SetPosition(mOrigPlayerX, mOrigPlayerY);
     mPlayer.SetSpriteSheet(mSpriteSheet);
 
     mStage.SetSpriteSheet(mSpriteSheet);
@@ -145,6 +145,9 @@ void PlayState::Update(float deltaTime)
         if(checkCanPickUpObject(mPlayer,(*itObj)))
         {
             itObj = mObjects.erase(itObj);
+            mPlayer.AddObject((*itObj));
+            if(mPlayer.CanOpenMainDoor())
+                mStage.OpenMainDoor();
         }
         else
         {
@@ -154,8 +157,27 @@ void PlayState::Update(float deltaTime)
     }
 
     //Mummies.
-    for(auto &mummy:mMummies)
-        mummy.Update(deltaTime);      
+    auto itMummy = mMummies.begin();
+    while(itMummy != mMummies.end())
+    {
+        if(checkPlayerIsAttackedByMummy(mPlayer,(*itMummy)))
+        {
+            if(mPlayer.GetPotions()>0)
+                mPlayer.ConsumePotion();
+            else
+            {
+                mPlayer.LostLive();
+                mPlayer.SetPosition(mOrigPlayerX, mOrigPlayerY);
+            }
+
+            itMummy = mMummies.erase(itMummy);
+        }
+        else
+        {
+           (*itMummy).Update(deltaTime);
+           ++itMummy;
+        }
+    } 
 }
 
 void PlayState::Render(SDL_Renderer *renderer)
@@ -207,4 +229,15 @@ bool PlayState::checkCanPickUpObject(const Player &player, const ItemObject &ite
     int yLog = (player.GetY()+16)/32;
 
     return (xObjLog == xLog) && (yObjLog == yLog);
+}
+
+bool PlayState::checkPlayerIsAttackedByMummy(const Player &player, const Mummy &mummy)
+{
+    int xMummyLog = (mummy.GetX()+16)/32;
+    int yMummyLog = (mummy.GetY()+16)/32;
+
+    int xLog = (player.GetX()+16)/32;
+    int yLog = (player.GetY()+16)/32;
+
+    return (xMummyLog == xLog) && (yMummyLog == yLog);   
 }

@@ -2,6 +2,7 @@
 #include "spritesheet.hpp"
 #include "trace.hpp"
 #include <sstream>
+#include "itemobject.hpp"
 
 Player::Player(IMapNotificable& map)
 {
@@ -14,6 +15,9 @@ Player::Player(IMapNotificable& map)
     mPosY=-1;
 
     mAnimName = "down";
+
+    mItemsToOpenMainDoor = 0;
+    mPotions = 0;
 }
 
 void Player::SetSpriteSheet(const SpriteSheet& spritesheet)
@@ -215,6 +219,49 @@ void Player::Render(SDL_Renderer *renderer)
         32
     };
     SDL_RenderCopy(renderer, mTexture, &orig, &dest);
+}
+
+
+void Player::AddObject(ItemObject item)
+{
+    if((item.GetType() == 3) || (item.GetType() == 4))
+        mItemsToOpenMainDoor += 1;
+    else
+    {
+        mPotions += 1;
+
+        std::stringstream msg;
+        msg << "[AddObject] Potions:" << mPotions;
+        Trace::Info("SDL",msg.str());
+    }
+}
+
+bool Player::CanOpenMainDoor()
+{
+    return mItemsToOpenMainDoor == 2;
+}
+
+int Player::GetPotions()
+{
+    return mPotions;
+}
+
+void Player::ConsumePotion()
+{
+    if( mPotions>0 )
+        mPotions -= 1;
+
+    std::stringstream msg;
+    msg << "[ConsumePotion] Potions:" << mPotions;
+    Trace::Info("SDL",msg.str());
+}
+
+void Player::LostLive()
+{
+    //TODO: gestionar vidas.
+    std::stringstream msg;
+    msg << "[LostLive] He perdido una vida!!";
+    Trace::Info("SDL",msg.str());
 }
 
 

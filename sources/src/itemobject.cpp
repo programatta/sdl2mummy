@@ -22,6 +22,11 @@ int ItemObject::GetY() const
     return mPosY;
 }
 
+int ItemObject::GetType() const
+{
+    return mType;
+}
+
 void ItemObject::Update(float deltaTime)
 {
     if(mState == ItemObjectState::SHOWING)

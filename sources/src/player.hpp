@@ -8,6 +8,7 @@
 #include "imapnotificable.hpp"
 
 class SpriteSheet;
+class ItemObject;
 
 enum PlayerDir {
     DOWN,
@@ -28,7 +29,13 @@ class Player
         void Move(PlayerDir direction);
         void Update(float deltaTime);
         void Render(SDL_Renderer *renderer);
-        
+
+        void AddObject(ItemObject item);
+        bool CanOpenMainDoor();
+        int GetPotions();
+        void ConsumePotion();
+        void LostLive();
+
     private:
         bool checkCollision(int x, int y) const;
         void updateMap(int x, int y, const std::string& dir);
@@ -44,6 +51,8 @@ class Player
         int mToY;
         FrameData mCurrentFrameData;
         IMapNotificable* mMap;
+        int mItemsToOpenMainDoor;
+        int mPotions;
 };
 
 #endif  //PLAYER_HPP

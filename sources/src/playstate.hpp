@@ -25,11 +25,14 @@ class PlayState : public ICreateObjectNotificable
     
     private:
         bool checkCanPickUpObject(const Player &player, const ItemObject &itemObject);
+        bool checkPlayerIsAttackedByMummy(const Player &player, const Mummy &mummy);
         
         SpriteSheet mSpriteSheet;
         SDL_Texture *mSpriteTex;
         Stage mStage;
         Player mPlayer;
+        float mOrigPlayerX;
+        float mOrigPlayerY;
         std::vector<ItemObject> mObjects;
         std::vector<Mummy> mMummies;
 
