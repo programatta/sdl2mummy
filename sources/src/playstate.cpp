@@ -152,6 +152,10 @@ void PlayState::Update(float deltaTime)
            ++itObj;
         }
     }
+
+    //Mummies.
+    for(auto &mummy:mMummies)
+        mummy.Update(deltaTime);      
 }
 
 void PlayState::Render(SDL_Renderer *renderer)
@@ -164,16 +168,20 @@ void PlayState::Render(SDL_Renderer *renderer)
 
     //Object.
     for(auto &object:mObjects)
-        object.Render(renderer);    
+        object.Render(renderer);
+
+    //Mummies.
+    for(auto &mummy:mMummies)
+        mummy.Render(renderer);    
 }
 
 void PlayState::CreateObject(int type, int x, int y)
 {
     if( type == 1 ) //Momia.
     {
-        // Mummy mummy(x,y);
-        // mummy.SetSpriteSheet(mSpriteSheet);
-        // mMummies.push_back(mummy);
+        Mummy mummy(x,y);
+        mummy.SetSpriteSheet(mSpriteSheet);
+        mMummies.push_back(mummy);
     }
     else if((2 <= type) && (type <= 4)) //Pocion, Llave y Papiro.
     {

@@ -8,6 +8,7 @@
 #include "player.hpp"
 #include "itemobject.hpp"
 #include "icreateobjectnotificable.hpp"
+#include "mummy.hpp"
 
 class PlayState : public ICreateObjectNotificable
 {
@@ -30,6 +31,7 @@ class PlayState : public ICreateObjectNotificable
         Stage mStage;
         Player mPlayer;
         std::vector<ItemObject> mObjects;
+        std::vector<Mummy> mMummies;
 
         //TODO: esto va tener que ir a un input manager o algo asi.
         float tX0;

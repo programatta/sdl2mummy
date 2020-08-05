@@ -10,6 +10,10 @@ Remake del juego *Oh! Mummy* desarrollado en C++ con la librería SDL2 y para la
 Basado en la estructura de proyecto [**sdl2anddesk**](https://github.com/programatta/sdl2anddesk.git).
 
 # Progreso.
+## 20200805.
+Se añade funcionalidad para manejar las momias.
+
+
 ## 20200723.
 Se añade -DCMAKE_BUILD_TYPE=Debug para depuración de la app.
 Se añade funcionalidad para obtener objetos de juego (llave, papiro y pocion).
