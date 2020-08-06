@@ -99,9 +99,10 @@ int Game::Run()
         mIsRunning = true;
     
     Timer timer(60);
+    timer.Start();
     while(mIsRunning)
     {
-        timer.Start();
+        //timer.Start();
 
         ProcessEvents();
         Update( timer.GetDeltaTime() );

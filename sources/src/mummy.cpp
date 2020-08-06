@@ -2,6 +2,7 @@
 #include "spritesheet.hpp"
 #include "trace.hpp"
 #include <sstream>
+#include <algorithm>
 
 Mummy::Mummy(int x, int y):mPosX(x),mPosY(y)
 {
@@ -300,6 +301,7 @@ std::string Mummy::GetNewDirection()
     else if(mAnimName == "right")
         inverseAnimName = "left";
 
+    //std::remove() is a function from stl (algoritm).
     std::vector<std::string> tmp(mCheckpoints[keyToSearch].begin(),mCheckpoints[keyToSearch].end());
     tmp.erase(std::remove(tmp.begin(), tmp.end(), inverseAnimName), tmp.end());
 

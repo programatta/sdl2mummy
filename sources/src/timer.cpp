@@ -42,4 +42,5 @@ void Timer::End()
     // Limit the time delta to 0.05 seconds (about 20FPS).
     if(mDeltaTime > 0.05f)
         mDeltaTime = 0.05f;
+    mFrameTime = currentTicks;
 }
